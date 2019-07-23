@@ -1,6 +1,7 @@
 import * as express from "express";
 import * as bodyParser from "body-parser";
 import * as mongoose from "mongoose";
+import * as cors from "cors";
 
 import { Routes } from "./routes/crmRoutes";
 
@@ -20,8 +21,11 @@ class App {
   private config(): void{
     // support application/json type post data
     this.app.use(bodyParser.json());
-    //support application/x-www-form-urlencoded post data
+    // support application/x-www-form-urlencoded post data
     this.app.use(bodyParser.urlencoded({ extended: false }));
+
+    // support Cross-origin resource sharing
+    this.app.use(cors());
   }
 
   private mongoSetup(): void{
