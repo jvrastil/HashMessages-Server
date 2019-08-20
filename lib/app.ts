@@ -16,7 +16,7 @@ class App {
     this.app = express();
     this.config();
     this.msgRoutes.routes(this.app);
-    // this.tagRoutes.routes(this.app);
+    this.tagRoutes.routes(this.app);
     this.mongoSetup();
   }
 
