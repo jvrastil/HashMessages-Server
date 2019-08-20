@@ -7,10 +7,10 @@ import { TagRoutes } from './routes/tagRoutes';
 
 class App {
 
-  public app: express.Application;
-  public msgRoutes: MessageRoutes = new MessageRoutes();
-  public tagRoutes: TagRoutes = new TagRoutes();
-  public readonly mongoUrl: string = 'mongodb://localhost/messageDb';
+  app: express.Application;
+  msgRoutes: MessageRoutes = new MessageRoutes();
+  tagRoutes: TagRoutes = new TagRoutes();
+  readonly mongoUrl: string = 'mongodb://localhost:27017/messageDb';
 
   constructor() {
     this.app = express();
@@ -31,8 +31,9 @@ class App {
   }
 
   private mongoSetup(): void{
-    mongoose.Promise = global.Promise;
+    (<any>mongoose).Promise = global.Promise;
     mongoose.connect(this.mongoUrl, {
+      useCreateIndex: true,
       useNewUrlParser: true
   });
   }

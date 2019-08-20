@@ -4,9 +4,9 @@ import { Request, Response } from 'express';
 
 export class MessageRoutes {
 
-  public messageController: MessageController = new MessageController();
+  messageController: MessageController = new MessageController();
 
-  public routes(app): void {
+  routes(app): void {
 
     app.route('/')
       .get((req: Request, res: Response) => {

@@ -1,32 +1,43 @@
-import * as mongoose from 'mongoose';
 import { Request, Response } from 'express';
-import { TagSchema } from '../models/tagModel';
+import TagModel  from '../models/tagModel';
 
-const Tag = mongoose.model('Tag', TagSchema);
+const uuidv1 = require('uuid/v1');
+
 export class TagController {
+  addNewTag(req: Request, res: Response) {
+    let newTag = new TagModel({
+      name: req.body.name,
+      uuid: uuidv1()
+    });
 
-  public addNewTag(req: Request, res: Response) {
-    let newTag = new Tag(req.body);
-
-    newTag.save((err, msg) => {
-      if (err) {
-        res.send(err);
+    TagModel.findOne({name: newTag.name}, (err, tag) => {
+      // no tag with same name was found
+      if (!err) {
+        newTag.save((err) => {
+          if (err) {
+            res.statusCode = 500;
+            res.send(err);
+          }
+          res.json(TagController.hidePrivateProperties(tag));
+        });
+      } else {
+        res.statusCode = 202;
+        res.json(TagController.hidePrivateProperties(tag));
       }
-      res.json(this.hidePrivateProperties(newTag));
     });
   }
 
-  public getTags (req: Request, res: Response) {
-    Tag.find({}, (err, tag) => {
+  getTags (req: Request, res: Response) {
+    TagModel.find({}, (err, tag) => {
       if(err){
         res.send(err);
       }
-      res.json(this.hidePrivateProperties(tag));
+      res.json(TagController.hidePrivateProperties(tag));
     });
   }
 
-  public getRelatedTags (req: Request, res: Response) {
-    Tag.find(tag => tag.uuid === req.params.uuid, (err, tag) => {
+  getRelatedTags (req: Request, res: Response) {
+    TagModel.findOne(tag => tag.uuid === req.params.uuid, (err, tag) => {
       if(err){
         res.send(err);
       }
@@ -34,18 +45,19 @@ export class TagController {
     });
   }
 
-  public getTagWithUuid (req: Request, res: Response) {
-    Tag.find(tag => tag.uuid === req.params.uuid, (err, tag) => {
+  getTagWithUuid (req: Request, res: Response) {
+    TagModel.find(tag => tag.uuid === req.params.uuid, (err, tag) => {
       if(err){
         res.send(err);
       }
-      res.json(this.hidePrivateProperties(tag));
+      res.json(TagController.hidePrivateProperties(tag));
     });
   }
 
-  private hidePrivateProperties(tag) {
+  private static hidePrivateProperties(tag) {
+    console.log(58, tag);
     return {
-      uuid: tag.uuid,
+      uuid: tag.uuid? tag.uuid : null,
       name: tag.name
     };
   }

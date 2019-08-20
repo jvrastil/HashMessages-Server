@@ -1,35 +1,31 @@
-import * as mongoose from 'mongoose';
-import { MessageSchema } from '../models/messageModel';
+import MessageModel from '../models/messageModel';
 import { Request, Response } from 'express';
-import * as bodyParser from 'body-parser';
-// const bodyParser = require('body-parser')
 
+const uuidv1 = require('uuid/v1');
 
-const Message = mongoose.model('Message', MessageSchema);
 export class MessageController {
-  private jsonParser = bodyParser.json();
 
-  public addNewMessage(req: Request, res: Response) {
-    console.log(9, req.body, req.query);
-
-    let newMsg = new Message({
-      message: req.body.message,
+  addNewMessage(req: Request, res: Response) {
+    const newMsg = new MessageModel({
       title: req.body.title,
-      tags: req.body.tags
+      message: req.body.message,
+      uuid: uuidv1(),
+      hashed: req.body.hashed,
+      tags: req.body.tags,
+      date: req.body.date,
     });
 
     newMsg.save((err) => {
       if (err) {
         res.statusCode = 500;
-        // res.setHeader('Content-Type', 'text/plain');
-        // res.end('Cannot ' + req.method + ' ' + req.url + ' newMsg =' + newMsg);
+        res.end('Cannot ' + req.method + ' ' + req.url + ' newMsg =' + newMsg);
       }
       res.json(newMsg);
     });
   }
 
-  public getMessages (req: Request, res: Response) {
-    Message.find({}, (err, contact) => {
+  getMessages (req: Request, res: Response) {
+    MessageModel.find({}, (err, contact) => {
       if(err){
         res.send(err);
       }
@@ -37,8 +33,8 @@ export class MessageController {
     });
   }
 
-  public getMessageWithId (req: Request, res: Response) {
-    Message.findById(req.params.id, (err, contact) => {
+  getMessageWithId (req: Request, res: Response) {
+    MessageModel.findById(req.params.id, (err, contact) => {
       if(err){
         res.send(err);
       }

@@ -4,9 +4,9 @@ import { TagController } from '../controllers/tagController';
 
 export class TagRoutes {
 
-  public tagController: TagController = new TagController();
+  tagController: TagController = new TagController();
 
-  public routes(app): void {
+  routes(app): void {
 
     // Create a new contact
     app.route('/add-new-tag')

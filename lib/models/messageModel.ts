@@ -2,10 +2,19 @@ import * as mongoose from 'mongoose';
 
 const Schema = mongoose.Schema;
 
-export const MessageSchema = new Schema({
+export interface IMessage extends mongoose.Document {
+  title: string;
+  message: string;
+  uuid: string;
+  hashed: boolean;
+  tags: string[];
+  date: Date;
+}
+
+const MessageSchema = new Schema({
   title: {
     type: String,
-    required: 'Enter a Message Title'
+    required: 'Message must have a Title',
   },
   message: {
     type: String,
@@ -13,6 +22,7 @@ export const MessageSchema = new Schema({
   },
   uuid: {
     type: String,
+    unique: true,
   },
   hashed: {
     type: Boolean,
@@ -29,3 +39,5 @@ export const MessageSchema = new Schema({
     default: Date.now,
   },
 });
+
+export default mongoose.model<IMessage>('Message', MessageSchema);
