@@ -2,6 +2,7 @@
   "name": "hash-messages-server",
   "version": "1.0.0",
   "description": "",
+  "license": "SEE LICENSE IN lecense.md",
   "main": "index.js",
   "scripts": {
     "build": "tsc",

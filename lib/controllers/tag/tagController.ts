@@ -1,7 +1,8 @@
 import { Request, Response } from 'express';
-import TagModel, { ITag } from '../models/tagModel';
+import TagModel, { ITag } from '../../models/tagModel';
 
 const uuidv1 = require('uuid/v1');
+const maxNumberOfDispalyedTags = 10;
 
 export class TagController {
 	addNewTag(req: Request, res: Response) {
@@ -34,7 +35,7 @@ export class TagController {
 			if (err) {
 				res.send(err);
 			}
-			res.json(tag.relatedTagsUuids);
+			res.json(tag.relatedTags);
 		});
 	}
 
@@ -48,7 +49,7 @@ export class TagController {
 	}
 
 	getTags(req: Request, res: Response) {
-		TagModel.find({}, (err, tag) => {
+		TagModel.find({}).sort({lastUsed : -1}).limit(maxNumberOfDispalyedTags).exec((err, tag) => {
 			if (err) {
 				res.send(err);
 			}
@@ -56,16 +57,7 @@ export class TagController {
 		});
 	}
 
-	setRelatedTags(tagUuid: string, relatedUuids: string[]) {
-	  TagModel.findByIdAndUpdate({uuid: tagUuid}, {$set: {relatedTagsUuids: relatedUuids}}, (err, tag) => {
-      if (err) {
-        console.log('An error occured during setRelatedTags');
-      } else {
-        console.log('setRelatedTags succesfull');
-        console.log(tag);
-      }
-    })
-  }
+
 
 	private static hidePrivateProperties(tag: ITag | ITag[]) {
 		function hideProperties(tag?: ITag) {

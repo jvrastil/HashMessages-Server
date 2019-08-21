@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 export interface ITag extends mongoose.Document {
   name: string;
   uuid: string;
-  relatedTagsUuids: string[];
+  relatedTags: {coef: number, uuid: string}[];
   lastUsed: Date;
 }
 
@@ -20,9 +20,9 @@ const TagSchema = new Schema({
   },
 
   // Backend only
-  relatedTagsUuids: [
+  relatedTags: [
     {
-      type: String,
+      type: Object,
     },
   ],
   lastUsed: {
