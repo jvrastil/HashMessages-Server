@@ -1,6 +1,6 @@
 import MessageModel from '../models/messageModel';
 import { Request, Response } from 'express';
-import {TagService} from './tag/tag.service';
+import { TagService } from './tag/tag.service';
 
 const uuidv1 = require('uuid/v1');
 
@@ -12,34 +12,32 @@ export class MessageController {
       uuid: uuidv1(),
       hashed: req.body.hashed,
       tags: req.body.tags,
-      date: req.body.date,
+      date: new Date()
     });
 
-    newMsg.save((err) => {
+    newMsg.save(err => {
       if (err) {
         res.statusCode = 500;
         res.end('Cannot ' + req.method + ' ' + req.url + ' newMsg =' + newMsg);
       } else {
         res.json(newMsg);
-        newMsg.tags.forEach(tag => {
-          TagService.setRelatedTags(tag, newMsg.tags);
-        });
+        newMsg.tags.forEach(tag => TagService.setRelatedTags(tag, newMsg.tags));
       }
     });
   }
 
-  getMessages (req: Request, res: Response) {
+  getMessages(req: Request, res: Response) {
     MessageModel.find({}, (err, contact) => {
-      if(err){
+      if (err) {
         res.send(err);
       }
       res.json(contact);
     });
   }
 
-  getMessageWithId (req: Request, res: Response) {
+  getMessageWithId(req: Request, res: Response) {
     MessageModel.findById(req.params.id, (err, contact) => {
-      if(err){
+      if (err) {
         res.send(err);
       }
       res.json(contact);

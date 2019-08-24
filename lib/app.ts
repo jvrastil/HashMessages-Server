@@ -1,12 +1,11 @@
-import * as express from "express";
-import * as bodyParser from "body-parser";
-import * as mongoose from "mongoose";
-import * as cors from "cors";
+import * as express from 'express';
+import * as bodyParser from 'body-parser';
+import * as mongoose from 'mongoose';
+import * as cors from 'cors';
 import { MessageRoutes } from './routes/messageRoutes';
 import { TagRoutes } from './routes/tagRoutes';
 
 class App {
-
   app: express.Application;
   msgRoutes: MessageRoutes = new MessageRoutes();
   tagRoutes: TagRoutes = new TagRoutes();
@@ -20,7 +19,7 @@ class App {
     this.mongoSetup();
   }
 
-  private config(): void{
+  private config(): void {
     // support application/json type post data
     this.app.use(bodyParser.json());
     //support application/x-www-form-urlencoded post data
@@ -30,12 +29,13 @@ class App {
     this.app.use(cors());
   }
 
-  private mongoSetup(): void{
+  private mongoSetup(): void {
     (<any>mongoose).Promise = global.Promise;
     mongoose.connect(this.mongoUrl, {
       useCreateIndex: true,
-      useNewUrlParser: true
-  });
+      useNewUrlParser: true,
+      useFindAndModify: false
+    });
   }
 }
 

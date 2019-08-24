@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 export interface ITag extends mongoose.Document {
   name: string;
   uuid: string;
-  relatedTags: {coef: number, uuid: string}[];
+  relatedTags: {};
   lastUsed: Date;
 }
 
@@ -20,14 +20,12 @@ const TagSchema = new Schema({
   },
 
   // Backend only
-  relatedTags: [
-    {
-      type: Object,
-    },
-  ],
-  lastUsed: {
-    type: Date,
+  relatedTags: {
+    type: Object
   },
+  lastUsed: {
+    type: Date
+  }
 });
 
 export default mongoose.model<ITag>('Tag', TagSchema);
