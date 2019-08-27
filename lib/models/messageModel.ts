@@ -6,7 +6,8 @@ export interface IMessage extends mongoose.Document {
   title: string;
   message: string;
   uuid: string;
-  hashed: boolean;
+  encrypted: boolean;
+  hashedTitle: string;
   tags: string[];
   date: Date;
 }
@@ -14,7 +15,7 @@ export interface IMessage extends mongoose.Document {
 const MessageSchema = new Schema({
   title: {
     type: String,
-    required: 'Message must have a Title',
+    required: 'Message must have a Title'
   },
   message: {
     type: String,
@@ -22,22 +23,25 @@ const MessageSchema = new Schema({
   },
   uuid: {
     type: String,
-    unique: true,
+    unique: true
   },
-  hashed: {
+  encrypted: {
     type: Boolean,
-    default: false,
+    default: false
+  },
+  hashedTitle: {
+    type: String
   },
   tags: [
     {
       type: String,
       required: 'Message must have tag(s)'
-    },
+    }
   ],
   date: {
     type: Date,
-    default: Date.now,
-  },
+    default: Date.now
+  }
 });
 
 export default mongoose.model<IMessage>('Message', MessageSchema);
