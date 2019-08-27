@@ -11,6 +11,7 @@ export class MessageController {
       message: req.body.message,
       uuid: uuidv1(),
       encrypted: req.body.encrypted,
+      hashedTitle: req.body.hashedTitle,
       tags: req.body.tags,
       date: new Date()
     });

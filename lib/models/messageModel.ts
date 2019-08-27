@@ -7,6 +7,7 @@ export interface IMessage extends mongoose.Document {
   message: string;
   uuid: string;
   encrypted: boolean;
+  hashedTitle: string;
   tags: string[];
   date: Date;
 }
@@ -27,6 +28,9 @@ const MessageSchema = new Schema({
   encrypted: {
     type: Boolean,
     default: false
+  },
+  hashedTitle: {
+    type: String
   },
   tags: [
     {
